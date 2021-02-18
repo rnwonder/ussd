@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "payfi ussd",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "author": "rnwonder",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "africastalking": "^0.5.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "ussd-menu-builder": "^1.2.0"
+  }
+}
