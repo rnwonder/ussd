@@ -10,38 +10,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
 
 
-// app.post('/', (req, res)=>{
 
-//     const {sessionId, serviceCode, phoneNumber, text} = req.body
-    
-//     let response = ""
-//     if (text == '') {
-//         response += "CON 1. Deposit/Withdraw Cash \n"
-//         response += "2. Salary Advance \n"
-//         response += "3. Football \n"
-//         response += "4. Back "
-//     } else if (text == '1') {
-//         response += "CON 1. Cash Deposit \n"
-//         response += "2. Cash Withdrawal"
-//     } else if (text == '11') {
-//         response += "CON Please enter the amount you wish to deposit \n"
-//     } else if (text == '12') {
-//        const balance = "KES 10,000"
-//         response = "END Your balance is " + balance
-//     } else if (text == '2') {
-//         response = "END This is your phone number " + phoneNumber
-//     }
-
-
-//     res.send(response)
-
-
-  
-// })
-
+// Holds deposit inputs
 let depo = []
+
+//Holds withdraw inputs
 let withd = []
-let token = '101'
+
+//Withdraw token
+let token = '0000'
 
 // Define menu states
 menu.startState({
@@ -62,30 +39,34 @@ menu.startState({
     }
 });
 
-menu.state('popup', {
-    run: () => {
-        menu.con('sdslsmdsnsd')
-        
-    }, 
-    next: {
-    
-    }
-})
- 
+
 menu.state('deposit/withdraw', {
     run: () => {
-        menu.con(
-            '1. Cash Deposit' +
-            '\n2. Cash Withdrawal'
-        )
-        
-    },
+        const start = 8
+        const end = 18
+        let currentTime = new Date()
 
+        // if (currentTime.getHours() >= start && currentTime.getHours() < end) {
+            menu.con(
+                '1. Cash Deposit' +
+                '\n2. Cash Withdrawal'
+            )
+        // } 
+        
+        // if (currentTime.getHours() < start || currentTime.getHours() > end){
+        //     menu.end('This service is available only between 08.00am - 05.00pm')
+        // }
+
+       
+        
+    }, 
     next: {
         '1': "deposit",
         '2': 'withdraw'
     }
-});
+})
+ 
+
 
 menu.state('deposit', {
     run: () => {
@@ -109,7 +90,7 @@ menu.state('deposit.amt', {
 menu.state('accountno', {
     run: () => {
         depo.push(Number(menu.val))
-        menu.con(`You are about to deposit NGN${depo[0]} into the account of SANNI OLUWASEUN ${depo[1]}` +
+        menu.con(`You are about to deposit NGN${depo[0]} into the account of SANNI OLUWASEUN` +
         '\n1. Continue' + 
         '\n2. Cancel' );
     },
@@ -122,7 +103,7 @@ menu.state('accountno', {
  
 menu.state('deposit.confirm', {
     run: () => {
-        menu.end(`Your request has been logged. Visit the nearest GTBank branch to complete your deposit. Dial *333# to check your balance.`)
+        menu.end(`Your request has been logged. Visit the nearest First Bank branch to complete your deposit. Dial *333# to check your balance. Your deposit token is ******`)
     }
 })
 
@@ -156,26 +137,16 @@ menu.state('withdraw.code', {
     run: () => {
         //Verify Token here
         if(menu.val != token) {
-            menu.end('Invalid token')
+            menu.end('Invalid Token/PIN')
         }
 
         if(menu.val == token) {
-            menu.end(`Your request has been logged. Visit the nearest GTBank branch to complete your deposit. Dial *333# to check your balance.`)
+            menu.end(`Your request has been logged. Visit the nearest First Bank branch to complete your withdrawal. Dial *333# to check your balance. Your withdraw token is ******`)
         }      
 
     }
 })
 
-// nesting states
-menu.state('buyAirtime.amount', {
-    run: () => {
-        // use menu.val to access user input value
-        var amount = Number(menu.val);
-        buyAirtime(menu.args.phoneNumber, amount).then(function(res){
-            menu.end('Airtime bought successfully.');
-        });
-    }
-});
  
 // Registering USSD handler with Express
  
